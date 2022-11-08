@@ -8,7 +8,7 @@ Program Information
 	Program Name: BatchImageProcessor
 	Programming Languages: Java
 	Date Started: 15 October 2022
-	Date of last update: 15 October 2022
+	Date of last update: 7 November 2022
 	
 Files in this Program
 	driver.java
@@ -43,7 +43,7 @@ Begin Code Area
 class Driver{
 	public static void main(String[] args) {
 		System.out.println("Hello, World!");
-		UI_Frontend front = new UI_Frontend();
-		front.hello();
+		GUI front = new GUI();
+		//front.hello();	
 	}
 }
