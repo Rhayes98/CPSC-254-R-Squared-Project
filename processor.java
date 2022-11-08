@@ -8,7 +8,7 @@ Program Information
 	Program Name: BatchImageProcessor
 	Programming Languages: Java
 	Date Started: 15 October 2022
-	Date of last update: 15 October 2022
+	Date of last update: 5 November, 2022
 	
 Files in this Program
 	driver.java
@@ -39,12 +39,25 @@ To Run this Program:
 	
 Begin Code Area
 -============================================================================*/
+/*
+package net.codejava.graphic;
+ 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+ 
+import javax.imageio.ImageIO;
+*/
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
 
 class Image_Processor{
-	
-	// want to look into buffer image library
-	 
-	
+
 	public Image_Processor() { // default constructor, does nothing right now
 	
 	}
@@ -53,15 +66,58 @@ class Image_Processor{
 		System.out.println("I'm the Processor. I edit the images");
 	}
 	
-	public void export(String location, String type, int resX, int resY) { // literally the only reason this file exists. Recieve file location, res_x, res_y, and desired file type then process, want to also keep in mind the .gif split feature we want
+	public void buffer_image(int resX, int resY, String file_name, String file_type) {
+		try {
+			File imageFile = new File(file_name);
+			BufferedImage bufferImage = ImageIO.read(imageFile);
+			String file_prefix = imageFile.getName().substring(0, imageFile.getName().lastIndexOf('.'));
+			    	
+			System.out.print("Imagename prefix = ");
+			System.out.println(file_prefix);
+			    	
+			BufferedImage stretchedImage = resizeMe(bufferImage, resX, resY);
+
+			saveImage(stretchedImage, file_type, file_prefix);
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
 	
-		// load image from file location, want to save name if possible
+	private static BufferedImage resizeMe(BufferedImage img, int width, int height) {
+		Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		
-		// process along x-axis
+		BufferedImage resized = new BufferedImage(width, height, img.getType());
 		
-		// process along y-axis
+		Graphics2D g2d = resized.createGraphics();
+		g2d.drawImage(tmp, 0, 0, null);
+		g2d.dispose();
 		
-		// export image with given type
-		// keep in mind, .gifs will be split into individual frames (name-1.out, name-2.out, name-3.out, ..., name-n.out)
+		return resized;
+	}
+	
+	private static void saveImage(BufferedImage bufferedImage, String imageType, String filePath) {
+		try {
+			boolean result;
+			File directory = new File("./Processed/");
+			if ( ! directory.exists() ) {
+				directory.mkdir();
+			}
+			
+			File outputfile = new File("./Processed/" + filePath + '.' + imageType);
+			
+			result = ImageIO.write(bufferedImage, imageType, outputfile);
+			// something fucks up here, won't write "jpg to png" or "png to jpg"
+			// my money's on the img.getType() in resizeME
+			// I give up, I have spent 3 hours googling potential solutions to no avail
+			if (result) {
+				System.out.print("Saved as");
+				System.out.println("./Processed/" + filePath + '.' + imageType);
+			} else {
+				System.out.println("Could not save the image");
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
