@@ -22,3 +22,16 @@ To run:
 	or
 	(In Linux Terminal)
 	sh compnrun.sh
+
+Using the Program:
+	Place all images you wish to process into the given "temp" folder
+	
+	Run the program (either via "java BatchImageProcessor" in linux terminal or "sh compnrun.sh" in linux terminal)
+	
+	In the on-screen window click the button labeled "Load Items to List"
+	In the on-screen window click the button labeled "Configure Settings"
+		In the pop-up window set your desired image width and height and click "confirm" and close the pop-up window
+	In the on-screen window click the button labeled "Process List" and wait for a few seconds
+		After waiting your images should be resized in a folder named "Processed" in the local directory of the program.
+		
+	Enjoy =)
