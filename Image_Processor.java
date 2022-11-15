@@ -1,3 +1,29 @@
+/* ------------------------------------------------------------------------
+ * Image_Processor.java
+ * ------------------------------------------------------------------------
+ * 
+ * Copyright © 2022 RSquared Authors
+ * 
+ * This source file may be used and distributed without restriction provided
+ * that this copyright statement is not removed from the file and that any
+ * derivative work contains the original copyright notice and the associated
+ * disclaimer.
+ *
+ * This source file is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This source file is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with the noasic library.  If not, see http://www.gnu.org/licenses
+ * 
+ * ------------------------------------------------------------------------ */
+
 /*-===========================================================================-
 Author Information
 	Program Author: Richard Hayes
@@ -71,10 +97,10 @@ class Image_Processor{
 	public void buffer_image(int resX, int resY, String file_name) {
 		System.out.printf("\nBegin conversion of %s\n", file_name);
 		try {
-			File imageFile = new File(file_name);
-			BufferedImage bufferImage = ImageIO.read(imageFile);
+			File image_file = new File(file_name);
+			BufferedImage buffer = ImageIO.read(image_file);
 			
-			String file_prefix = imageFile.getName().substring(0, imageFile.getName().lastIndexOf('.'));
+			String file_prefix = image_file.getName().substring(0, image_file.getName().lastIndexOf('.'));
 			String file_type = file_name.substring(file_name.lastIndexOf('.'));
 			file_type = file_type.substring(1);
 			
@@ -82,9 +108,9 @@ class Image_Processor{
 			//System.out.println(file_prefix);
 			//System.out.printf("File Extension = %s\n", file_type);
 			    	
-			BufferedImage stretchedImage = resize_me(bufferImage, resX, resY);
+			BufferedImage output_image = resize_me(buffer, resX, resY);
 
-			saveImage(stretchedImage, file_type, file_prefix);
+			save_image(output_image, file_type, file_prefix);
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -96,16 +122,16 @@ class Image_Processor{
 	/*  when called take given image and parameters for resize and      */
 	/*  redraw, return redrawn image                                    */
 	/********************************************************************/
-	private static BufferedImage resize_me(BufferedImage img, int width, int height) {
-		Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+	private static BufferedImage resize_me(BufferedImage image, int width, int height) {
+		Image temp = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		
-		BufferedImage resized = new BufferedImage(width, height, img.getType());
+		BufferedImage output = new BufferedImage(width, height, image.getType());
 		
-		Graphics2D g2d = resized.createGraphics();
-		g2d.drawImage(tmp, 0, 0, null);
+		Graphics2D g2d = output.createGraphics();
+		g2d.drawImage(temp, 0, 0, null);
 		g2d.dispose();
 		
-		return resized;
+		return output;
 	}
 	
 	/********************************************************************/
@@ -113,20 +139,21 @@ class Image_Processor{
 	/*  when called take given image and save to given filepath as given*/
 	/*  filetype                                                        */
 	/********************************************************************/
-	private static void saveImage(BufferedImage bufferedImage, String imageType, String filePath) {
+	private static void save_image(BufferedImage buffered_image, String image_type, String file_path) {
 		try {
 			boolean result;
+			
 			File directory = new File("./Processed/");
 			if ( ! directory.exists() ) {
 				directory.mkdir();
 			}
 			
-			File outputfile = new File("./Processed/" + filePath + '.' + imageType);
+			File outputfile = new File("./Processed/" + file_path + '.' + image_type);
 			
-			result = ImageIO.write(bufferedImage, imageType, outputfile);
+			result = ImageIO.write(buffered_image, image_type, outputfile);
 			if (result) {
 				System.out.print("Saved as");
-				System.out.println("./Processed/" + filePath + '.' + imageType);
+				System.out.println("./Processed/" + file_path + '.' + image_type);
 			} else {
 				System.out.println("Could not save the image");
 			}
